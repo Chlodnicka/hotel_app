@@ -11,4 +11,15 @@ namespace HotelApp\Domain\Event;
 class HotelEdited implements Event
 {
 
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var int
+     */
+    private $addressId;
+
+
 }

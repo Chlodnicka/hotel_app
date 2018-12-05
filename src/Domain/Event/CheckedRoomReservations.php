@@ -8,7 +8,32 @@
 
 namespace HotelApp\Domain\Event;
 
+/**
+ * Class CheckedRoomReservations
+ * @package HotelApp\Domain\Event
+ */
 class CheckedRoomReservations implements Event
 {
+    /**
+     * @var int
+     */
+    private $roomId;
+
+    /**
+     * CheckedRoomReservations constructor.
+     * @param int $roomId
+     */
+    public function __construct($roomId)
+    {
+        $this->roomId = $roomId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRoomId(): int
+    {
+        return $this->roomId;
+    }
 
 }
