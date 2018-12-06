@@ -10,7 +10,7 @@ namespace HotelApp\Infrastructure\Role;
 
 use HotelApp\Domain\Model\Role;
 use Prooph\EventSourcing\Aggregate\AggregateRepository;
-use HotelApp\Infrastructure\RoleRepository as RoleInterface;
+use HotelApp\Infrastructure\RoleInterface;
 use Prooph\EventSourcing\Aggregate\AggregateType;
 use Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator;
 use Prooph\EventStore\EventStore;

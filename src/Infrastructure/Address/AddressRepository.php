@@ -8,21 +8,21 @@
 
 namespace HotelApp\Infrastructure\User;
 
-use HotelApp\Domain\Model\User;
+use HotelApp\Domain\Model\Address;
+use HotelApp\Infrastructure\AddressInterface;
 use Prooph\EventSourcing\Aggregate\AggregateRepository;
 use Prooph\EventSourcing\Aggregate\AggregateType;
 use Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator;
 use Prooph\EventStore\EventStore;
 use Prooph\SnapshotStore\SnapshotStore;
-use HotelApp\Infrastructure\UserInterface as UserInterface;
 
-class UserRepository extends AggregateRepository implements UserInterface
+class AddressRepository extends AggregateRepository implements AddressInterface
 {
     public function __construct(EventStore $eventStore, SnapshotStore $snapshotStore)
     {
         parent::__construct(
             $eventStore,
-            AggregateType::fromAggregateRootClass(User::class),
+            AggregateType::fromAggregateRootClass(Address::class),
             new AggregateTranslator(),
             $snapshotStore,
             null,
@@ -30,12 +30,12 @@ class UserRepository extends AggregateRepository implements UserInterface
         );
     }
 
-    public function save(User $user): void
+    public function save(Address $address): void
     {
-        $this->saveAggregateRoot($user);
+        $this->saveAggregateRoot($address);
     }
 
-    public function load(string $id): ?User
+    public function load(string $id): ?Address
     {
         return $this->getAggregateRoot($id);
     }

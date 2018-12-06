@@ -23,6 +23,9 @@ class Room
     /** @var  Hotel */
     private $hotel;
 
-    /** @var   */
+    /** @var  int */
+    private $capacity;
+
+    /** @var */ //can be free/occupied (now)
     private $status; //? todo
 }

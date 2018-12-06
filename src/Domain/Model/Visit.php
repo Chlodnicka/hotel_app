@@ -25,9 +25,12 @@ class Visit
     /** @var  Money */
     private $price;
 
-    /** @var  Status */ //can be upcoming|cancelled|in_progress|finished
+    /** @var  Status */ //can be in_progress|finished
     private $status;
 
     /** @var  FullPayment */
     private $payment;
+
+    /** @var  Reservation */
+    private $reservation;
 }
