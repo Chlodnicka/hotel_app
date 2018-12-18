@@ -8,8 +8,11 @@
 
 namespace HotelApp\Domain\Model;
 
+use HotelApp\Domain\Model\Event\User\UserEdited;
+use HotelApp\Domain\Model\Event\User\UserPasswordChanged;
 use HotelApp\Domain\Model\Event\User\UserRegistered;
 use HotelApp\Domain\Model\Event\User\UserRolesAdded;
+use HotelApp\Domain\Model\Event\User\UserRolesDeleted;
 use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
 
@@ -65,6 +68,37 @@ class User extends AggregateRoot
         ]));
     }
 
+    public function deleteRoles(array $roles): void
+    {
+        $roles = array_diff($this->roles, $roles);
+
+        $this->recordThat(UserRolesDeleted::occur($this->id, [
+            'roles' => $roles
+        ]));
+    }
+
+    public function edit(string $lastName, string $firstName): void
+    {
+        if ($this->lastname === $lastName && $this->firstname === $firstName) {
+            return;
+        }
+
+        $this->recordThat(UserEdited::occur($this->id, [
+            'firstName' => $firstName,
+            'lastName' => $lastName
+        ]));
+    }
+
+    public function changePassword(string $password): void
+    {
+        if ($this->password === $password) {
+            return;
+        }
+        $this->recordThat(UserPasswordChanged::occur($this->id, [
+            'password' => $password
+        ]));
+    }
+
     protected function apply(AggregateChanged $event): void
     {
         switch (get_class($event)) {
@@ -77,6 +111,19 @@ class User extends AggregateRoot
             case UserRolesAdded::class:
                 /** @var UserRolesAdded $event */
                 $this->roles = array_merge($this->roles, $event->roles());
+                break;
+            case UserRolesDeleted::class:
+                /** @var UserRolesDeleted $event */
+                $this->roles = $event->roles();
+                break;
+            case UserPasswordChanged::class:
+                /** @var UserPasswordChanged $event */
+                $this->password = $event->password();
+                break;
+            case UserEdited::class:
+                /** @var UserEdited $event */
+                $this->firstname = $event->firstName();
+                $this->lastname = $event->lastName();
                 break;
         }
     }

@@ -12,17 +12,24 @@ namespace HotelApp\Domain\Model\Command\Company;
 use Prooph\Common\Messaging\Command;
 use Prooph\Common\Messaging\PayloadTrait;
 
-class AddCompanyAddressHandler extends Command
+class AddCompanyAddressHandler
 {
-    use PayloadTrait;
+    /** @var  RoleRepository */
+    private $repository;
 
-    public function id(): string
+    /**
+     * CreateRoleHandler constructor.
+     * @param RoleRepository $repository
+     */
+    public function __construct(RoleRepository $repository)
     {
-        return $this->payload()['id'];
+        $this->repository = $repository;
     }
 
-    public function addressId(): string
+
+    public function __invoke(CreateRole $createRole)
     {
-        return $this->payload()['addressId'];
+        $user = Role::createWithData($createRole->id(), $createRole->name());
+        $this->repository->save($user);
     }
 }

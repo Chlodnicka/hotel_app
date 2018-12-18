@@ -6,7 +6,7 @@
  * Time: 19:32
  */
 
-namespace HotelApp\Infrastructure\User;
+namespace HotelApp\Infrastructure\Company;
 
 use HotelApp\Domain\Model\Company;
 use HotelApp\Infrastructure\CompanyInterface;

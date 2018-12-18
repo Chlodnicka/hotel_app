@@ -9,25 +9,31 @@
 namespace HotelApp\Domain\Model\Command\User;
 
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
+use HotelApp\Infrastructure\User\UserRepository;
 
-class ChangeUserPasswordHandler extends Command
+class ChangeUserPasswordHandler
 {
-    use PayloadTrait;
+    /** @var  UserRepository */
+    private $repository;
 
-    public function id(): string
+    /**
+     * AddUserRolesHandler constructor.
+     * @param UserRepository $repository
+     */
+    public function __construct(UserRepository $repository)
     {
-        return $this->payload()['id'];
+        $this->repository = $repository;
     }
 
-    public function email(): string
+    public function __invoke(ChangeUserPassword $changeUserPassword)
     {
-        return $this->payload()['email'];
+        $user = $this->repository->load($changeUserPassword->id());
+        if ($user->getEmail() === $changeUserPassword->email()) {
+            $user->changePassword($changeUserPassword->password());
+            $this->repository->save($user);
+        } else {
+            throw new \Exception('Wrong email');
+        }
     }
 
-    public function password(): string
-    {
-        return $this->payload()['password'];
-    }
 }

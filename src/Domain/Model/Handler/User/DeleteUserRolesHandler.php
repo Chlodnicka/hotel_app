@@ -9,22 +9,27 @@
 namespace HotelApp\Domain\Model\Command\User;
 
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
+use HotelApp\Infrastructure\User\UserRepository;
 
-class DeleteUserRolesHandler extends Command
+class DeleteUserRolesHandler
 {
 
-    use PayloadTrait;
+    /** @var  UserRepository */
+    private $repository;
 
-    public function id(): string
+    /**
+     * AddUserRolesHandler constructor.
+     * @param UserRepository $repository
+     */
+    public function __construct(UserRepository $repository)
     {
-        return $this->payload()['id'];
+        $this->repository = $repository;
     }
 
-    public function roles(): array
+    public function __invoke(DeleteUserRoles $deleteUserRoles)
     {
-        return $this->payload()['roles'];
+        $user = $this->repository->load($deleteUserRoles->id());
+        $user->deleteRoles($deleteUserRoles->roles());
+        $this->repository->save($user);
     }
-
 }

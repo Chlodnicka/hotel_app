@@ -9,25 +9,27 @@
 namespace HotelApp\Domain\Model\Command\User;
 
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
+use HotelApp\Infrastructure\User\UserRepository;
 
-class EditUserHandler extends Command
+class EditUserHandler
 {
-    use PayloadTrait;
+    /** @var  UserRepository */
+    private $repository;
 
-    public function id(): string
+    /**
+     * AddUserRolesHandler constructor.
+     * @param UserRepository $repository
+     */
+    public function __construct(UserRepository $repository)
     {
-        return $this->payload()['id'];
+        $this->repository = $repository;
     }
 
-    public function firstName(): string
+    public function __invoke(EditUser $editUser)
     {
-        return $this->payload()['firstName'];
+        $user = $this->repository->load($editUser->id());
+        $user->edit($editUser->firstName(), $editUser->lastName());
+        $this->repository->save($user);
     }
 
-    public function lastName(): string
-    {
-        return $this->payload()['lastName'];
-    }
 }

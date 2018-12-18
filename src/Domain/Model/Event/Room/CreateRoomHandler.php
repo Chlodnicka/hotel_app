@@ -3,15 +3,15 @@
  * Created by PhpStorm.
  * User: majac
  * Date: 06.12.2018
- * Time: 16:59
+ * Time: 17:18
  */
 
-namespace HotelApp\Domain\Model\Command\Company;
+namespace HotelApp\Domain\Model\Command\Room;
 
 use Prooph\Common\Messaging\Command;
 use Prooph\Common\Messaging\PayloadTrait;
 
-class CreateCompany extends Command
+class CreateRoomHandler extends Command
 {
     use PayloadTrait;
 
@@ -20,13 +20,9 @@ class CreateCompany extends Command
         return $this->payload()['id'];
     }
 
-    public function name(): string
+    public function number(): string
     {
-        return $this->payload()['name'];
+        return $this->payload()['number'];
     }
 
-    public function ownerId(): string
-    {
-        return $this->payload()['ownerId'];
-    }
 }

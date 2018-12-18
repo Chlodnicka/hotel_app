@@ -8,20 +8,34 @@
 
 namespace HotelApp\Domain\Model\Command\Company;
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
 
-class CreateCompanyHandler extends Command
+use HotelApp\Domain\Model\Company;
+use HotelApp\Infrastructure\Company\CompanyRepository;
+use HotelApp\Infrastructure\User\UserRepository;
+
+class CreateCompanyHandler
 {
-    use PayloadTrait;
+    /** @var  CompanyRepository */
+    private $repository;
 
-    public function id(): string
+    /** @var  UserRepository */
+    private $userRepository;
+
+    /**
+     * CreateCompanyHandler constructor.
+     * @param CompanyRepository $repository
+     */
+    public function __construct(CompanyRepository $repository, UserRepository $userRepository)
     {
-        return $this->payload()['id'];
+        $this->repository = $repository;
+        $this->userRepository = $userRepository;
     }
 
-    public function name(): string
+
+    public function __invoke(CreateCompany $createCompany)
     {
-        return $this->payload()['name'];
+        $user = $this->userRepository->load($createCompany->ownerId());
+        $company = Company::createWithData($createCompany->id(), $createCompany->name(), $user);
+        $this->repository->save($company);
     }
 }

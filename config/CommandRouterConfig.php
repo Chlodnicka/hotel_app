@@ -10,6 +10,8 @@ namespace Config;
 
 use HotelApp\Domain\Model\Command\Role\CreateRole;
 use HotelApp\Domain\Model\Command\User\AddUserRoles;
+use HotelApp\Domain\Model\Command\User\DeleteUserRoles;
+use HotelApp\Domain\Model\Command\User\DeleteUserRolesHandler;
 use HotelApp\Domain\Model\Command\User\RegisterUser;
 use HotelApp\Domain\Model\Handler\Role\CreateRoleHandler;
 use HotelApp\Domain\Model\Handler\User\AddUserRolesHandler;
@@ -44,6 +46,8 @@ class CommandRouterConfig
         $router->route(RegisterUser::class)->to(new RegisterUserHandler($this->userRepository));
         $router->route(CreateRole::class)->to(new CreateRoleHandler($this->roleRepository));
         $router->route(AddUserRoles::class)->to(new AddUserRolesHandler($this->userRepository));
+
+        $router->route(DeleteUserRoles::class)->to(new DeleteUserRolesHandler($this->userRepository));
         $router->attachToMessageBus($this->commandBus);
     }
 
