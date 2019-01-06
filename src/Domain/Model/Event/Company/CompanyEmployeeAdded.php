@@ -18,5 +18,4 @@ class CompanyEmployeeAdded extends AggregateChanged
     {
         return $this->payload()['employee'];
     }
-
 }

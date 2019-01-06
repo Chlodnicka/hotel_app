@@ -6,23 +6,37 @@
  * Time: 17:10
  */
 
-namespace HotelApp\Domain\Model\Command\Hotel;
+namespace HotelApp\Domain\Model\Handler\Hotel;
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
+use HotelApp\Domain\Model\Command\Hotel\CreateHotel;
+use HotelApp\Domain\Model\Hotel;
+use HotelApp\Infrastructure\Company\CompanyRepository;
+use HotelApp\Infrastructure\Hotel\HotelRepository;
 
-class CreateHotelHandler extends Command
+class CreateHotelHandler
 {
-    use PayloadTrait;
+    /** @var  HotelRepository */
+    private $repository;
 
-    public function id(): string
+    /** @var  CompanyRepository */
+    private $companyRepository;
+
+    /**
+     * CreateHotelHandler constructor.
+     * @param HotelRepository $repository
+     * @param CompanyRepository $companyRepository
+     */
+    public function __construct(HotelRepository $repository, CompanyRepository $companyRepository)
     {
-        return $this->payload()['id'];
+        $this->repository = $repository;
+        $this->companyRepository = $companyRepository;
     }
 
-    public function name(): string
+    public function __invoke(CreateHotel $createHotel)
     {
-        return $this->payload()['name'];
+        $hotel = Hotel::createWithData($createHotel->id(), $createHotel->name());
+        $this->repository->save($hotel);
     }
+
 
 }

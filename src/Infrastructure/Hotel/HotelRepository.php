@@ -6,7 +6,7 @@
  * Time: 19:32
  */
 
-namespace HotelApp\Infrastructure\User;
+namespace HotelApp\Infrastructure\Hotel;
 
 use HotelApp\Domain\Model\Hotel;
 use HotelApp\Infrastructure\HotelInterface;
@@ -30,11 +30,18 @@ class HotelRepository extends AggregateRepository implements HotelInterface
         );
     }
 
+    /**
+     * @param Hotel $hotel
+     */
     public function save(Hotel $hotel): void
     {
         $this->saveAggregateRoot($hotel);
     }
 
+    /**
+     * @param string $id
+     * @return Hotel|null
+     */
     public function load(string $id): ?Hotel
     {
         return $this->getAggregateRoot($id);

@@ -10,6 +10,7 @@ namespace {
 
     use Config\CommandRouterConfig;
     use HotelApp\Domain\Model\Command\Address\CreateAddress;
+    use HotelApp\Domain\Model\Command\Address\EditAddress;
     use HotelApp\Domain\Model\Command\Company\AddCompanyAddress;
     use HotelApp\Domain\Model\Command\Company\AddCompanyEmployee;
     use HotelApp\Domain\Model\Command\Company\CreateCompany;
@@ -110,7 +111,19 @@ namespace {
         'userId' => $userEmployee2
     ]));
 
-    //change company address
+    $commandBus->dispatch(new EditAddress([
+        'id' => $addressId,
+        'street' => 'Nowsza',
+        'buildingNumber' => '11',
+        'flatNumber' => '1',
+        'postalCode' => '12-111',
+        'city' => 'Test'
+    ]));
+
+    $company = $router->getCompanyRepository()->load($companyId);
+    print_r('Adres:');
+    var_dump($company->getAddress());
+
 
     //create hotel
 

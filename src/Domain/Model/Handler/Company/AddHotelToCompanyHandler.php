@@ -6,23 +6,40 @@
  * Time: 17:04
  */
 
-namespace HotelApp\Domain\Model\Command\Company;
+namespace HotelApp\Domain\Model\Handler\Company;
 
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
+use HotelApp\Domain\Model\Command\Company\AddHotelToCompany;
+use HotelApp\Infrastructure\Company\CompanyRepository;
+use HotelApp\Infrastructure\Hotel\HotelRepository;
 
-class AddHotelToCompanyHandler extends Command
+class AddHotelToCompanyHandler
 {
-    use PayloadTrait;
+    /** @var  CompanyRepository */
+    private $repository;
 
-    public function id(): string
+    /** @var  HotelRepository */
+    private $hotelRepository;
+
+    /**
+     * AddHotelToCompanyHandler constructor.
+     * @param CompanyRepository $repository
+     * @param HotelRepository $hotelRepository
+     */
+    public function __construct(CompanyRepository $repository, HotelRepository $hotelRepository)
     {
-        return $this->payload()['id'];
+        $this->repository = $repository;
+        $this->hotelRepository = $hotelRepository;
     }
 
-    public function hotelId(): string
+    public function __invoke(AddHotelToCompany $addHotelToCompany)
     {
-        return $this->payload()['hotelId'];
+        $hotel = $this->hotelRepository->load($addHotelToCompany->hotelId());
+        $company = $this->repository->load($addHotelToCompany->id());
+        if ($hotel) {
+            $company->addHotel($hotel);
+            $this->repository->save($company);
+        }
     }
+
 }

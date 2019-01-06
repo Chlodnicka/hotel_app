@@ -6,13 +6,13 @@
  * Time: 17:20
  */
 
-namespace HotelApp\Domain\Model\Command\Hotel;
+namespace HotelApp\Domain\Model\Handler\Hotel;
 
 
 use Prooph\Common\Messaging\Command;
 use Prooph\Common\Messaging\PayloadTrait;
 
-class AddRoomToHotelHandler extends Command
+class AddHotelRoomHandler extends Command
 {
     use PayloadTrait;
 

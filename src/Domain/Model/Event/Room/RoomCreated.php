@@ -6,20 +6,12 @@
  * Time: 17:18
  */
 
-namespace HotelApp\Domain\Model\Command\Room;
+namespace HotelApp\Domain\Model\Event\Room;
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
+use Prooph\EventSourcing\AggregateChanged;
 
-class CreateRoom extends Command
+class RoomCreated extends AggregateChanged
 {
-    use PayloadTrait;
-
-    public function id(): string
-    {
-        return $this->payload()['id'];
-    }
-
     public function number(): int
     {
         return $this->payload()['number'];
