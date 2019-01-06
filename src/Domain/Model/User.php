@@ -57,8 +57,6 @@ class User extends AggregateRoot
 
     public function addRoles($roles): void
     {
-        $roles = array_diff($roles, $this->roles);
-
         if (empty($roles)) {
             return;
         }

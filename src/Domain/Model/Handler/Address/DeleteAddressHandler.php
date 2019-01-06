@@ -6,19 +6,33 @@
  * Time: 17:09
  */
 
-namespace HotelApp\Domain\Model\Command\Address;
+namespace HotelApp\Domain\Model\Handler\Address;
 
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
+use HotelApp\Domain\Model\Command\Address\DeleteAddress;
+use HotelApp\Infrastructure\Address\AddressRepository;
 
-class DeleteAddressHandler extends Command
+class DeleteAddressHandler
 {
-    use PayloadTrait;
+    /** @var  AddressRepository */
+    private $repository;
 
-    public function id(): string
+    /**
+     * DeleteAddressHandler constructor.
+     * @param AddressRepository $repository
+     */
+    public function __construct(AddressRepository $repository)
     {
-        return $this->payload()['id'];
+        $this->repository = $repository;
+    }
+
+    public function __invoke(DeleteAddress $deleteAddress)
+    {
+        $address = $this->repository->load($deleteAddress->id());
+        if ($address) {
+            $address->delete();
+            $this->repository->save($address);
+        }
     }
 
 }

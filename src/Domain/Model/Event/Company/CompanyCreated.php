@@ -6,7 +6,7 @@
  * Time: 16:59
  */
 
-namespace HotelApp\Domain\Model\Command\Company;
+namespace HotelApp\Domain\Model\Event\Company;
 
 use HotelApp\Domain\Model\User;
 use Prooph\EventSourcing\AggregateChanged;

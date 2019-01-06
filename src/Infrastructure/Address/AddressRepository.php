@@ -6,7 +6,7 @@
  * Time: 19:32
  */
 
-namespace HotelApp\Infrastructure\User;
+namespace HotelApp\Infrastructure\Address;
 
 use HotelApp\Domain\Model\Address;
 use HotelApp\Infrastructure\AddressInterface;
@@ -35,6 +35,10 @@ class AddressRepository extends AggregateRepository implements AddressInterface
         $this->saveAggregateRoot($address);
     }
 
+    /**
+     * @param string $id
+     * @return Address|null
+     */
     public function load(string $id): ?Address
     {
         return $this->getAggregateRoot($id);

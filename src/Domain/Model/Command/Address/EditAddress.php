@@ -11,7 +11,7 @@ namespace HotelApp\Domain\Model\Command\Address;
 use Prooph\Common\Messaging\Command;
 use Prooph\Common\Messaging\PayloadTrait;
 
-class ChangeAddress extends Command
+class EditAddress extends Command
 {
     use PayloadTrait;
 

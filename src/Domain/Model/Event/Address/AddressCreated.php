@@ -6,19 +6,14 @@
  * Time: 17:02
  */
 
-namespace HotelApp\Domain\Model\Command\Address;
+namespace HotelApp\Domain\Model\Event\Address;
 
 use Prooph\Common\Messaging\Command;
 use Prooph\Common\Messaging\PayloadTrait;
+use Prooph\EventSourcing\AggregateChanged;
 
-class ChangeAddressHandler extends Command
+class AddressCreated extends AggregateChanged
 {
-    use PayloadTrait;
-
-    public function id(): string
-    {
-        return $this->payload()['id'];
-    }
 
     public function street(): string
     {

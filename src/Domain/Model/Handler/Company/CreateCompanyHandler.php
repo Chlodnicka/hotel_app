@@ -6,9 +6,10 @@
  * Time: 16:59
  */
 
-namespace HotelApp\Domain\Model\Command\Company;
+namespace HotelApp\Domain\Model\Handler\Company;
 
 
+use HotelApp\Domain\Model\Command\Company\CreateCompany;
 use HotelApp\Domain\Model\Company;
 use HotelApp\Infrastructure\Company\CompanyRepository;
 use HotelApp\Infrastructure\User\UserRepository;

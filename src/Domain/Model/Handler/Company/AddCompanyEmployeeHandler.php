@@ -6,13 +6,12 @@
  * Time: 17:05
  */
 
-namespace HotelApp\Domain\Model\Command\Company;
+namespace HotelApp\Domain\Model\Handler\Company;
 
 
+use HotelApp\Domain\Model\Command\Company\AddCompanyEmployee;
 use HotelApp\Infrastructure\Company\CompanyRepository;
 use HotelApp\Infrastructure\User\UserRepository;
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
 
 class AddCompanyEmployeeHandler
 {
@@ -36,7 +35,8 @@ class AddCompanyEmployeeHandler
     public function __invoke(AddCompanyEmployee $addCompanyEmployee)
     {
         $user = $this->userRepository->load($addCompanyEmployee->userId());
-        $company = Company::createWithData($createCompany->id(), $createCompany->name(), $user);
+        $company = $this->repository->load($addCompanyEmployee->id());
+        $company->addEmployee($user);
         $this->repository->save($company);
     }
 

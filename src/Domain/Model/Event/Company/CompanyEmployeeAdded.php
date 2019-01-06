@@ -6,16 +6,17 @@
  * Time: 17:05
  */
 
-namespace HotelApp\Domain\Model\Command\Company;
+namespace HotelApp\Domain\Model\Event\Company;
 
 
+use HotelApp\Domain\Model\User;
 use Prooph\EventSourcing\AggregateChanged;
 
 class CompanyEmployeeAdded extends AggregateChanged
 {
-    public function user(): string
+    public function employee(): User
     {
-        return $this->payload()['user'];
+        return $this->payload()['employee'];
     }
 
 }

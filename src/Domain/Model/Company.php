@@ -8,8 +8,9 @@
 
 namespace HotelApp\Domain\Model;
 
-use HotelApp\Domain\Model\Command\Company\CompanyCreated;
-use HotelApp\Domain\Model\Command\Company\CompanyEmployeeAdded;
+use HotelApp\Domain\Model\Event\Company\CompanyAddressAdded;
+use HotelApp\Domain\Model\Event\Company\CompanyCreated;
+use HotelApp\Domain\Model\Event\Company\CompanyEmployeeAdded;
 use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
 
@@ -56,6 +57,13 @@ class Company extends AggregateRoot
         ]));
     }
 
+    public function addAddress(Address $address)
+    {
+        $this->recordThat(CompanyAddressAdded::occur($this->id, [
+            'address' => $address
+        ]));
+    }
+
     protected function apply(AggregateChanged $event): void
     {
         switch (get_class($event)) {
@@ -68,7 +76,12 @@ class Company extends AggregateRoot
             case CompanyEmployeeAdded::class:
                 /** @var CompanyEmployeeAdded $event */
                 $this->id = $event->aggregateId();
-                $this->employees[] = $event->user();
+                $this->employees[] = $event->employee();
+                break;
+            case CompanyAddressAdded::class:
+                /** @var CompanyAddressAdded $event */
+                $this->id = $event->aggregateId();
+                $this->address = $event->address();
                 break;
         }
     }

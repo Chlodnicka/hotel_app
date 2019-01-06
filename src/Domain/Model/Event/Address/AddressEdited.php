@@ -2,24 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: majac
- * Date: 06.12.2018
- * Time: 17:02
+ * Date: 04.01.2019
+ * Time: 19:15
  */
 
-namespace HotelApp\Domain\Model\Command\Address;
+namespace HotelApp\Domain\Model\Event\Address;
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
 
-class ChangeAddressHandler extends Command
+use Prooph\EventSourcing\AggregateChanged;
+
+class AddressEdited extends AggregateChanged
 {
-    use PayloadTrait;
-
-    public function id(): string
-    {
-        return $this->payload()['id'];
-    }
-
     public function street(): string
     {
         return $this->payload()['street'];

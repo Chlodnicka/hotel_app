@@ -6,30 +6,40 @@
  * Time: 17:01
  */
 
-namespace HotelApp\Domain\Model\Command\Company;
+namespace HotelApp\Domain\Model\Handler\Company;
 
 
-use Prooph\Common\Messaging\Command;
-use Prooph\Common\Messaging\PayloadTrait;
+use HotelApp\Domain\Model\Command\Company\AddCompanyAddress;
+use HotelApp\Infrastructure\Company\CompanyRepository;
+use HotelApp\Infrastructure\Address\AddressRepository;
 
 class AddCompanyAddressHandler
 {
-    /** @var  RoleRepository */
+    /** @var  CompanyRepository */
     private $repository;
 
+    /** @var  AddressRepository */
+    private $addressRepository;
+
     /**
-     * CreateRoleHandler constructor.
-     * @param RoleRepository $repository
+     * AddCompanyAddressHandler constructor.
+     * @param CompanyRepository $repository
+     * @param AddressRepository $addressRepository
      */
-    public function __construct(RoleRepository $repository)
+    public function __construct(CompanyRepository $repository, AddressRepository $addressRepository)
     {
         $this->repository = $repository;
+        $this->addressRepository = $addressRepository;
     }
 
 
-    public function __invoke(CreateRole $createRole)
+    public function __invoke(AddCompanyAddress $addCompanyAddress)
     {
-        $user = Role::createWithData($createRole->id(), $createRole->name());
-        $this->repository->save($user);
+        $address = $this->addressRepository->load($addCompanyAddress->addressId());
+        $company = $this->repository->load($addCompanyAddress->id());
+        if ($address && $company) {
+            $company->addAddress($address);
+            $this->repository->save($company);
+        }
     }
 }
