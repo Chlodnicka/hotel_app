@@ -3,20 +3,20 @@
  * Created by PhpStorm.
  * User: majac
  * Date: 06.12.2018
- * Time: 17:20
+ * Time: 17:15
  */
 
 namespace HotelApp\Domain\Model\Event\Hotel;
 
-
-use HotelApp\Domain\Model\Room;
+use HotelApp\Domain\Model\User;
 use Prooph\EventSourcing\AggregateChanged;
 
-class HotelRoomAdded extends AggregateChanged
+class HotelEmployeeAdded extends AggregateChanged
 {
-    public function room(): Room
+
+    public function employee(): User
     {
-        return $this->payload()['room'];
+        return $this->payload()['employee'];
     }
 
 }

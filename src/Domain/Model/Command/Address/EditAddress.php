@@ -30,7 +30,7 @@ class EditAddress extends Command
         return $this->payload()['buildingNumber'];
     }
 
-    public function flatNumber(): string
+    public function flatNumber(): ?string
     {
         return $this->payload()['flatNumber'];
     }

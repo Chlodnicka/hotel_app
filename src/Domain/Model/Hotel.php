@@ -9,9 +9,10 @@
 namespace HotelApp\Domain\Model;
 
 
-use HotelApp\Domain\Model\Command\Hotel\HotelRoomAdded;
+use HotelApp\Domain\Model\Event\Hotel\HotelRoomAdded;
 use HotelApp\Domain\Model\Event\Hotel\HotelAddressAdded;
 use HotelApp\Domain\Model\Event\Hotel\HotelCreated;
+use HotelApp\Domain\Model\Event\Hotel\HotelEmployeeAdded;
 use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
 
@@ -31,6 +32,9 @@ class Hotel extends AggregateRoot
 
     /** @var  Room[] */
     private $rooms;
+
+    /** @var  User[] */
+    private $employees;
 
     static public function createWithData(string $id, string $name): self
     {
@@ -54,6 +58,13 @@ class Hotel extends AggregateRoot
         ]));
     }
 
+    public function addEmployee(User $employee)
+    {
+        $this->recordThat(HotelEmployeeAdded::occur($this->id, [
+            'employee' => $employee
+        ]));
+    }
+
     public function addRoom(Room $room)
     {
         $this->recordThat(HotelRoomAdded::occur($this->id, [
@@ -73,6 +84,10 @@ class Hotel extends AggregateRoot
                 /** @var HotelAddressAdded $event */
                 $this->address = $event->address();
                 break;
+            case HotelEmployeeAdded::class:
+                /** @var HotelEmployeeAdded $event */
+                $this->employees[] = $event->employee();
+                break;
             case HotelRoomAdded::class:
                 /** @var HotelRoomAdded $event */
                 $this->rooms[] = $event->room();
@@ -80,5 +95,52 @@ class Hotel extends AggregateRoot
         }
     }
 
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getName(): int
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
+    /**
+     * @return Company
+     */
+    public function getCompany(): Company
+    {
+        return $this->company;
+    }
+
+    /**
+     * @return Room[]
+     */
+    public function getRooms(): array
+    {
+        return $this->rooms;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getEmployees(): array
+    {
+        return $this->employees;
+    }
 
 }

@@ -18,18 +18,14 @@ class CreateHotelHandler
     /** @var  HotelRepository */
     private $repository;
 
-    /** @var  CompanyRepository */
-    private $companyRepository;
 
     /**
      * CreateHotelHandler constructor.
      * @param HotelRepository $repository
-     * @param CompanyRepository $companyRepository
      */
-    public function __construct(HotelRepository $repository, CompanyRepository $companyRepository)
+    public function __construct(HotelRepository $repository)
     {
         $this->repository = $repository;
-        $this->companyRepository = $companyRepository;
     }
 
     public function __invoke(CreateHotel $createHotel)

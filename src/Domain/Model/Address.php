@@ -26,7 +26,7 @@ class Address extends AggregateRoot
     /** @var  string */
     private $buildingNumber;
 
-    /** @var  string */
+    /** @var  string|null */
     private $flatNumber;
 
     /** @var  string */
@@ -41,7 +41,7 @@ class Address extends AggregateRoot
     static public function createWithData(string $id,
                                           string $street,
                                           string $buildingNumber,
-                                          string $flatNumber,
+                                          ?string $flatNumber,
                                           string $postalCode,
                                           string $city): self
     {
@@ -65,7 +65,7 @@ class Address extends AggregateRoot
     public function edit(
         string $street,
         string $buildingNumber,
-        string $flatNumber,
+        ?string $flatNumber,
         string $postalCode,
         string $city
     )

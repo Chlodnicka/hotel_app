@@ -13,8 +13,14 @@ namespace {
     use HotelApp\Domain\Model\Command\Address\EditAddress;
     use HotelApp\Domain\Model\Command\Company\AddCompanyAddress;
     use HotelApp\Domain\Model\Command\Company\AddCompanyEmployee;
+    use HotelApp\Domain\Model\Command\Company\AddHotelToCompany;
     use HotelApp\Domain\Model\Command\Company\CreateCompany;
+    use HotelApp\Domain\Model\Command\Hotel\AddHotelAddress;
+    use HotelApp\Domain\Model\Command\Hotel\AddHotelEmployee;
+    use HotelApp\Domain\Model\Command\Hotel\AddHotelRoom;
+    use HotelApp\Domain\Model\Command\Hotel\CreateHotel;
     use HotelApp\Domain\Model\Command\Role\CreateRole;
+    use HotelApp\Domain\Model\Command\Room\CreateRoom;
     use HotelApp\Domain\Model\Command\User\AddUserRoles;
     use HotelApp\Domain\Model\Command\User\RegisterUser;
     use Prooph\ServiceBus\CommandBus;
@@ -120,25 +126,77 @@ namespace {
         'city' => 'Test'
     ]));
 
-    $company = $router->getCompanyRepository()->load($companyId);
-    print_r('Adres:');
-    var_dump($company->getAddress());
+    $hotelId = '1';
+    $hotelId2 = '2';
 
+    $commandBus->dispatch(new CreateHotel([
+        'id' => $hotelId,
+        'name' => 'Hotel1'
+    ]));
 
-    //create hotel
+    $commandBus->dispatch(new CreateHotel([
+        'id' => $hotelId2,
+        'name' => 'Hotel2'
+    ]));
 
-    //create hotel2
+    $commandBus->dispatch(new AddHotelToCompany([
+        'id' => $companyId,
+        'hotelId' => $hotelId
+    ]));
 
-    //add hotels to company
+    $commandBus->dispatch(new AddHotelToCompany([
+        'id' => $companyId,
+        'hotelId' => $hotelId2
+    ]));
 
-    //add employee1 to hotel1
+    $commandBus->dispatch(new AddHotelAddress([
+        'id' => $hotelId,
+        'addressId' => $addressId
+    ]));
 
-    //add employee2 to hotel1 and hotel2
+    $addressId2 = '2';
 
-    //create room1, room2, room3, room4
+    $commandBus->dispatch(new CreateAddress([
+        'id' => $addressId2,
+        'street' => 'Testowa hotelowa',
+        'buildingNumber' => '2',
+        'flatNumber' => null,
+        'postalCode' => '12-543',
+        'city' => 'Test'
+    ]));
 
-    //add room1 and room2 to hotel1
+    $commandBus->dispatch(new AddHotelAddress([
+        'id' => $hotelId2,
+        'addressId' => $addressId2
+    ]));
 
-    //add room3 and room4 to hotel2
+    $commandBus->dispatch(new AddHotelEmployee([
+        'id' => $hotelId,
+        'employeeId' => $userEmployee
+    ]));
+
+    $commandBus->dispatch(new AddHotelEmployee([
+        'id' => $hotelId,
+        'employeeId' => $userEmployee2
+    ]));
+
+    $commandBus->dispatch(new AddHotelEmployee([
+        'id' => $hotelId2,
+        'employeeId' => $userEmployee
+    ]));
+
+    $roomIds = ['1', '2', '3', '4', '5', '6', '7'];
+    foreach ($roomIds as $roomId) {
+        $commandBus->dispatch(new CreateRoom([
+            'id' => $roomId,
+            'number' => rand(1, 8),
+            'capacity' => rand(2, 5),
+            'price' => rand(80, 300)
+        ]));
+        $commandBus->dispatch(new AddHotelRoom([
+            'id' => (string)rand(1, 2),
+            'roomId' => $roomId
+        ]));
+    }
 
 }

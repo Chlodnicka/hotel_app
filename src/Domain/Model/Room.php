@@ -55,7 +55,7 @@ class Room extends AggregateRoot
 
     protected function aggregateId(): string
     {
-        return $this->aggregateId();
+        return $this->id;
     }
 
     protected function apply(AggregateChanged $event): void

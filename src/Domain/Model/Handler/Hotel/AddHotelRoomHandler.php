@@ -9,21 +9,39 @@
 namespace HotelApp\Domain\Model\Handler\Hotel;
 
 
+use HotelApp\Domain\Model\Command\Hotel\AddHotelRoom;
+use HotelApp\Infrastructure\Hotel\HotelRepository;
+use HotelApp\Infrastructure\Room\RoomRepository;
 use Prooph\Common\Messaging\Command;
 use Prooph\Common\Messaging\PayloadTrait;
 
-class AddHotelRoomHandler extends Command
+class AddHotelRoomHandler
 {
-    use PayloadTrait;
+    /** @var  HotelRepository */
+    private $repository;
 
-    public function id(): string
+    /** @var  RoomRepository */
+    private $roomRepository;
+
+    /**
+     * AddHotelRoomHandler constructor.
+     * @param HotelRepository $repository
+     * @param RoomRepository $roomRepository
+     */
+    public function __construct(HotelRepository $repository, RoomRepository $roomRepository)
     {
-        return $this->payload()['id'];
+        $this->repository = $repository;
+        $this->roomRepository = $roomRepository;
     }
 
-    public function roomId(): string
-    {
-        return $this->payload()['roomId'];
-    }
 
+    public function __invoke(AddHotelRoom $addHotelRoom)
+    {
+        $hotel = $this->repository->load($addHotelRoom->id());
+        $room = $this->roomRepository->load($addHotelRoom->roomId());
+        if ($hotel && $room) {
+            $hotel->addRoom($room);
+            $this->repository->save($hotel);
+        }
+    }
 }
